@@ -18,33 +18,45 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
-# Function to generate a joke dynamically using Gemini API
-def get_joke():
-    """Generates a fresh, unique programming-related joke dynamically using Gemini API."""
-    try:
-        # Adding randomness to prevent caching
-        random_seed = random.randint(1, 10000)
-        timestamp = int(time.time())  # Add timestamp variation
+# Supported Languages
+languages = {
+    "English": "English",
+    "Spanish": "Spanish",
+    "French": "French",
+    "German": "German",
+    "Italian": "Italian",
+    "Hindi": "Hindi",
+    "Chinese": "Chinese",
+    "Japanese": "Japanese",
+    "Arabic": "Arabic"
+}
 
-        prompt = f"Tell me a unique and funny programming joke. Make sure it's different from any previous joke. (Seed: {random_seed}, Time: {timestamp})"
+# Function to generate a joke dynamically using Gemini API in the selected language
+def get_joke(language):
+    """Generates a fresh, unique programming-related joke in the selected language."""
+    try:
+        random_seed = random.randint(1, 10000)
+        timestamp = int(time.time())
+
+        prompt = f"Tell me a unique and funny programming joke in {language}. Make sure it's different from any previous joke. (Seed: {random_seed}, Time: {timestamp})"
 
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
         st.error(f"Error generating joke: {e}")
-        return "Oops! Couldn't fetch a joke this time."
+        return f"Oops! Couldn't fetch a joke in {language} this time."
 
 # Recipe & Customization Generator
-def generate_recipe(user_input, word_count, ingredients="", dietary_preference="", cooking_time="", flavor_profile=""):
-    """Generates a recipe based on user preferences and provides nutritional info."""
-    st.write("### 🍳 Generating your recipe...")
-    
-    joke = get_joke()
+def generate_recipe(user_input, word_count, ingredients="", dietary_preference="", cooking_time="", flavor_profile="", language="English"):
+    """Generates a recipe in the selected language based on user preferences and provides nutritional info."""
+    st.write(f"### 🍳 Generating your recipe in {language}...")
+
+    joke = get_joke(language)
     if joke:
-        st.write(f"While waiting, here's a joke: **{joke}** 😂")
+        st.write(f"While waiting, here's a joke in {language}: **{joke}** 😂")
 
     # Construct prompt
-    prompt = f"Write a {word_count}-word recipe on {user_input}."
+    prompt = f"Write a {word_count}-word recipe on {user_input} in {language}."
     if ingredients:
         prompt += f" Use only the following ingredients: {ingredients}."
     if dietary_preference:
@@ -62,11 +74,11 @@ def generate_recipe(user_input, word_count, ingredients="", dietary_preference="
         return response.text.strip()
     except Exception as e:
         st.error(f"Error generating recipe: {e}")
-        return "Sorry, an error occurred!"
+        return f"Sorry, an error occurred while generating the recipe in {language}."
 
 # Streamlit UI
 st.title("Flavour Fusion: AI-Driven Recipe Blogging")
-st.subheader("Generate AI-powered recipes with customization and dynamic jokes!")
+st.subheader("Generate AI-powered recipes with customization, multi-language support, and dynamic jokes!")
 
 # User Input Section
 user_input = st.text_input("Enter a Recipe Topic (e.g., 'Vegan Chocolate Cake'):", "")
@@ -78,11 +90,14 @@ dietary_preference = st.selectbox("Select Dietary Preference:", ["None", "Vegan"
 cooking_time = st.slider("Max Cooking Time (minutes):", min_value=5, max_value=120, value=30, step=5)
 flavor_profile = st.selectbox("Select Flavor Profile:", ["None", "Spicy", "Sweet", "Savory", "Sour", "Umami"])
 
+# Language Selection
+language = st.selectbox("Select Language:", list(languages.keys()))
+
 # Generate Button
 if st.button("Generate Recipe"):
     if not user_input and not ingredients:
         st.warning("Please enter either a recipe topic or ingredients!")
     else:
-        recipe = generate_recipe(user_input, word_count, ingredients, dietary_preference, cooking_time, flavor_profile)
-        st.write("## 🍽️ Your AI-Generated Recipe:")
+        recipe = generate_recipe(user_input, word_count, ingredients, dietary_preference, cooking_time, flavor_profile, language)
+        st.write(f"## 🍽️ Your AI-Generated Recipe in {language}:")
         st.write(recipe)
