@@ -1,8 +1,9 @@
 import streamlit as st
 import google.generativeai as genai
 import os
-from dotenv import load_dotenv
 import random
+import time
+from dotenv import load_dotenv
 
 # Load API key securely
 load_dotenv()
@@ -19,12 +20,15 @@ model = genai.GenerativeModel("gemini-1.5-flash")
 
 # Function to generate a joke dynamically using Gemini API
 def get_joke():
-    """Generates a programming-related joke dynamically using Gemini API."""
+    """Generates a fresh, unique programming-related joke dynamically using Gemini API."""
     try:
-        chat_session = model.start_chat(history=[
-            {"role": "user", "parts": ["Tell me a funny programming-related joke."]},
-        ])
-        response = chat_session.send_message("Tell me a funny programming-related joke.")
+        # Adding randomness to prevent caching
+        random_seed = random.randint(1, 10000)
+        timestamp = int(time.time())  # Add timestamp variation
+
+        prompt = f"Tell me a unique and funny programming joke. Make sure it's different from any previous joke. (Seed: {random_seed}, Time: {timestamp})"
+
+        response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
         st.error(f"Error generating joke: {e}")
@@ -54,12 +58,8 @@ def generate_recipe(user_input, word_count, ingredients="", dietary_preference="
     prompt += " Also, provide a detailed nutritional breakdown for each ingredient used, including total calories, proteins, fats, and carbs."
 
     try:
-        # Start a chat session with Gemini AI
-        chat_session = model.start_chat(history=[
-            {"role": "user", "parts": [prompt]},
-        ])
-        response = chat_session.send_message(prompt)
-        return response.text
+        response = model.generate_content(prompt)
+        return response.text.strip()
     except Exception as e:
         st.error(f"Error generating recipe: {e}")
         return "Sorry, an error occurred!"
