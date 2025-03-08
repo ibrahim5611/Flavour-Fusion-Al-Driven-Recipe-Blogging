@@ -17,21 +17,27 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
-# Joke Generator Function
+# Function to generate a joke dynamically using Gemini API
 def get_joke():
-    jokes = [
-        "Why don't programmers like nature? It has too many bugs.",
-        "Why do Java developers wear glasses? Because they don't see sharp.",
-        "Why do programmers prefer dark mode? Because light attracts bugs!",
-        "Why did the developer go broke? Because he used up all his cache."
-    ]
-    return random.choice(jokes)
+    """Generates a programming-related joke dynamically using Gemini API."""
+    try:
+        chat_session = model.start_chat(history=[
+            {"role": "user", "parts": ["Tell me a funny programming-related joke."]},
+        ])
+        response = chat_session.send_message("Tell me a funny programming-related joke.")
+        return response.text.strip()
+    except Exception as e:
+        st.error(f"Error generating joke: {e}")
+        return "Oops! Couldn't fetch a joke this time."
 
 # Recipe & Customization Generator
 def generate_recipe(user_input, word_count, ingredients="", dietary_preference="", cooking_time="", flavor_profile=""):
     """Generates a recipe based on user preferences and provides nutritional info."""
     st.write("### 🍳 Generating your recipe...")
-    st.write(f"While waiting, here's a joke: **{get_joke()}** 😂")
+    
+    joke = get_joke()
+    if joke:
+        st.write(f"While waiting, here's a joke: **{joke}** 😂")
 
     # Construct prompt
     prompt = f"Write a {word_count}-word recipe on {user_input}."
@@ -60,7 +66,7 @@ def generate_recipe(user_input, word_count, ingredients="", dietary_preference="
 
 # Streamlit UI
 st.title("Flavour Fusion: AI-Driven Recipe Blogging")
-st.subheader("Generate AI-powered recipes with customization and nutritional info!")
+st.subheader("Generate AI-powered recipes with customization and dynamic jokes!")
 
 # User Input Section
 user_input = st.text_input("Enter a Recipe Topic (e.g., 'Vegan Chocolate Cake'):", "")
