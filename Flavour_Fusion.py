@@ -83,6 +83,16 @@ def generate_recipe(user_input, word_count, ingredients="", dietary_preference="
         st.error(f"Error generating recipe: {e}")
         return f"Sorry, an error occurred while generating the {cuisine} recipe in {language}."
 
+# AI Cooking Assistant Chatbot
+def chat_with_assistant(user_query):
+    """Provides real-time cooking help, ingredient substitutes, and cooking tips."""
+    try:
+        response = model.generate_content(f"Answer this cooking-related question: {user_query}")
+        return response.text.strip()
+    except Exception as e:
+        st.error(f"Error fetching assistant response: {e}")
+        return "Sorry, I couldn't find an answer to your question."
+
 # Streamlit UI
 st.title("Flavour Fusion: AI-Driven Recipe Blogging")
 st.subheader("Generate AI-powered recipes with customization, multi-language support, and cultural adaptations!")
@@ -111,3 +121,12 @@ if st.button("Generate Recipe"):
         recipe = generate_recipe(user_input, word_count, ingredients, dietary_preference, cooking_time, flavor_profile, language, cuisine)
         st.write(f"## 🍽️ Your {cuisine if cuisine != 'None' else ''} AI-Generated Recipe in {language}:")
         st.write(recipe)
+
+# AI Cooking Assistant Chatbot
+st.sidebar.title("👨‍🍳 AI-Powered Cooking Assistant")
+st.sidebar.write("Ask real-time cooking questions, get ingredient substitutes, and more!")
+
+user_query = st.sidebar.text_input("Ask me anything about cooking:")
+if user_query:
+    assistant_response = chat_with_assistant(user_query)
+    st.sidebar.write(f"**AI Cooking Assistant:** {assistant_response}")
