@@ -257,3 +257,26 @@ if enable_shopping_list:
         "<script>function printShoppingList() { window.print(); }</script><button onclick='printShoppingList()'>🖨️ Print Shopping List</button>",
         unsafe_allow_html=True
     )
+
+# Add Smart Recipe Scaling Section in Sidebar
+st.sidebar.subheader("🍽️ Smart Recipe Scaling")
+servings = st.sidebar.slider("Select Number of Servings:", min_value=1, max_value=100, value=4, step=1)
+
+# Function to scale recipe ingredients based on servings
+def scale_recipe(recipe_text, servings):
+    """Scales recipe ingredient quantities based on servings."""
+    try:
+        prompt = f"Adjust the ingredient quantities in the following recipe to serve {servings} people:\n\n{recipe_text}"
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception:
+        return "Unable to scale the recipe at the moment."
+
+# Button to scale recipe
+if st.sidebar.button("🔄 Scale Recipe"):
+    if not st.session_state.recipe_text:
+        st.sidebar.warning("⚠️ Generate a recipe first before scaling!")
+    else:
+        scaled_recipe = scale_recipe(st.session_state.recipe_text, servings)
+        st.subheader(f"📏 Scaled Recipe for {servings} Servings:")
+        st.write(scaled_recipe)
