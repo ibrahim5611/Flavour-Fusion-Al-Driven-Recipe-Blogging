@@ -22,6 +22,13 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
+# Initialize session state variables
+if "recipe_text" not in st.session_state:
+    st.session_state.recipe_text = ""
+if "food_pairings" not in st.session_state:
+    st.session_state.food_pairings = ""
+if "translated_ui" not in st.session_state:
+    st.session_state.translated_ui = {}
 
 # Apply custom CSS for better styling
 st.markdown("""
@@ -31,6 +38,7 @@ st.markdown("""
         }
         .stButton>button {
             color: white;
+            hover-color: white;
             background-color: #ff4b4b;
             border-radius: 8px;
             padding: 10px 24px;
@@ -44,47 +52,78 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Function to translate UI dynamically
+def translate_text(text, target_language):
+    try:
+        prompt = f"Translate the following text into {target_language}: {text}"
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception:
+        return text  # Return original text if translation fails
+
+# Function to update UI translations dynamically
+def update_ui_language(selected_language):
+    ui_texts = {
+        "title": "Flavour Fusion: AI-Driven Recipe Blogging",
+        "settings": "⚙️ Settings",
+        "generate_recipe": "Generate Recipe 🍽️",
+        "ai_generated_recipe": "📜 AI-Generated Recipe:",
+        "food_pairings": "🍷 Food Pairing Suggestions:",
+        "ai_chef_qa": "🧑‍🍳 Live Q&A with AI Chef",
+        "ask_question": "Ask a question about the recipe:",
+        "ask_ai_chef": "Ask AI Chef 🤖",
+        "shopping_list": "🛒 Shopping List Generator",
+        "enable_shopping_list": "Enable Shopping List",
+        "smart_scaling": "🍽️ Smart Recipe Scaling",
+        "scale_recipe": "🔄 Scale Recipe",
+        "your_shopping_list": "🛒 Your Shopping List",
+        "export_pdf": "📄 Export as PDF",
+        "export_png": "🖼️ Export as PNG",
+        "export_jpg": "🖼️ Export as JPG"
+
+    }
+    
+    for key, value in ui_texts.items():
+        st.session_state.translated_ui[key] = translate_text(value, selected_language)
+
+
 # Sidebar for settings
 st.sidebar.title("⚙️ Settings")
-language = st.sidebar.selectbox("Select Language:", ["English", "Spanish", "French", "German", "Italian", "Hindi", "Chinese", "Japanese", "Arabic"])
+selected_language = st.sidebar.selectbox("🌍 Select Language", ["English","Spanish", "French", "German", "Italian", "Hindi", "Chinese", "Japanese", "Arabic"])
+if st.sidebar.button("🌐 Apply Language"):
+    update_ui_language(selected_language)
 cuisine = st.sidebar.selectbox("Select Cuisine:", ["None", "Italian", "Indian", "Mexican", "Chinese", "Thai", "French", "Mediterranean", "Japanese", "Korean"])
 dietary_preference = st.sidebar.selectbox("Dietary Preference:", ["None", "Vegan", "Vegetarian", "Gluten-Free", "Keto", "Paleo", "Halal", "Kosher"])
 cooking_time = st.sidebar.slider("Max Cooking Time (minutes):", min_value=5, max_value=120, value=30, step=5)
 flavor_profile = st.sidebar.selectbox("Flavor Profile:", ["None", "Spicy", "Sweet", "Savory", "Sour", "Umami"])
 
 # Main title
-st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>Flavour Fusion: AI Recipe Generator</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>Flavour Fusion: AI-Driven Recipe Blogging</h1>", unsafe_allow_html=True)
 
 # User Input Section (Merged Recipe Name & Ingredients)
 st.subheader("🔍 Enter Recipe Details")
 recipe_details = st.text_area("Enter a recipe name, ingredients, or both:", "", height=100)
-word_count = st.number_input("Enter Word Count:", min_value=100, max_value=2000, step=100, value=500)
+word_count = st.number_input("Enter Word Count:", min_value=100, max_value=3000, step=100, value=500)
 
 # Function to generate a joke dynamically
-def get_joke(language):
+def get_joke(selected_language):
     try:
         random_seed = random.randint(1, 10000)
         timestamp = int(time.time())
-        prompt = f"Tell me a unique and funny programming joke in {language}. (Seed: {random_seed}, Time: {timestamp})"
+        prompt = f"Tell me a unique and funny joke in {selected_language} and the joke should not be repeated every time you should tell new jokes. (Seed: {random_seed}, Time: {timestamp})"
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception:
-        return f"Oops! Couldn't fetch a joke in {language} this time."
+        return f"Oops! Couldn't fetch a joke in {selected_language} this time."
 
 # Function to generate food pairing suggestions
 def get_food_pairing(recipe_name, cuisine):
     try:
-        prompt = f"Suggest complementary dishes, drinks, and desserts for {recipe_name} that match {cuisine} cuisine in {language}."
+        prompt = f"Suggest complementary dishes, drinks, and desserts for {recipe_name} that match {cuisine} cuisine fully in {selected_language}."
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception:
         return "No pairing suggestions available."
-
-# Store generated recipe in session state to prevent clearing
-if "recipe_text" not in st.session_state:
-    st.session_state.recipe_text = ""
-if "food_pairings" not in st.session_state:
-    st.session_state.food_pairings = ""
 
 # Function to generate the recipe with merged input
 def generate_recipe():
@@ -92,13 +131,13 @@ def generate_recipe():
         st.warning("⚠️ Please enter a recipe name or ingredients!")
         return
 
-    st.write(f"### 🍳 Generating your {cuisine if cuisine != 'None' else ''} recipe in {language}...")
+    st.write(f"### 🍳 Generating your {cuisine if cuisine != 'None' else ''} recipe in {selected_language}...")
 
-    joke = get_joke(language)
+    joke = get_joke(selected_language)
     st.info(f"💡 Joke of the day: {joke}")
 
     # Construct prompt
-    prompt = f"Write a {word_count}-word recipe based on the following details: {recipe_details}. Generate the recipe in {language}."
+    prompt = f"Write a {word_count}-word recipe based on the following details: {recipe_details}. Generate the recipe in {selected_language}."
     if dietary_preference:
         prompt += f" Ensure the recipe follows a {dietary_preference} diet."
     if cooking_time:
@@ -107,7 +146,7 @@ def generate_recipe():
         prompt += f" Make the dish {flavor_profile} in taste."
     if cuisine != "None":
         prompt += f" Ensure the recipe follows {cuisine} cuisine traditions, including authentic ingredients and cooking methods."
-    prompt += " Also, provide a detailed nutritional breakdown."
+    prompt += " Also, provide a detailed nutritional breakdown in {selected_language}."
 
     try:
         response = model.generate_content(prompt)
@@ -127,11 +166,11 @@ if st.session_state.recipe_text:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("📜 AI-Generated Recipe:")
+        st.subheader(st.session_state.translated_ui.get("ai_generated_recipe", "📜 AI-Generated Recipe:"))
         st.write(st.session_state.recipe_text)
 
     with col2:
-        st.subheader("🍷 Food Pairing Suggestions:")
+        st.subheader(st.session_state.translated_ui.get("food_pairings", "🍷 Food Pairing Suggestions:"))
         st.write(st.session_state.food_pairings)
 
 # 🧑‍🍳 Live Q&A Section
@@ -145,7 +184,7 @@ def ask_ai_chef(question, recipe_text):
         return "Please enter a question about the recipe."
     
     try:
-        prompt = f"The following is a recipe: {recipe_text}. The user has a question: {question}. Provide a helpful and concise answer in {language}."
+        prompt = f"The following is a recipe: {recipe_text}. The user has a question: {question}. Provide a helpful and concise answer in {selected_language}."
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
@@ -186,7 +225,7 @@ def generate_shopping_list():
     if "shopping_list" not in st.session_state:
         st.session_state.shopping_list = ingredients_list
 
-    st.subheader("📝 Your Shopping List:")
+    st.subheader(st.session_state.translated_ui.get("your_shopping_list", "🛒 Your Shopping List",))
     st.text_area("Editable Shopping List", value=st.session_state.shopping_list, height=200)
 
 # Function to create a PDF shopping list
@@ -209,11 +248,11 @@ def create_pdf():
 # Function to create an image (PNG/JPG) of the shopping list
 def create_image():
     """Creates an image of the shopping list."""
-    img = Image.new("RGB", (600, 800), "white")
+    img = Image.new("RGB", (800, 800), "white")
     draw = ImageDraw.Draw(img)
     
     try:
-        font = ImageFont.truetype("arial.ttf", 24)
+        font = ImageFont.truetype("NotoSans-Regular.ttf", 24)
     except:
         font = ImageFont.load_default()
 
@@ -241,7 +280,7 @@ if enable_shopping_list:
             st.download_button(label="Download PDF", data=pdf_file, file_name="Shopping_List.pdf", mime="application/pdf")
 
     with col2:
-        if st.button("🖼️ Export as PNG"):
+        if st.button(st.session_state.translated_ui.get("export_png", "🖼️ Export as PNG")):
             img_file = create_image()
             st.download_button(label="Download PNG", data=img_file, file_name="Shopping_List.png", mime="image/png")
 
@@ -250,15 +289,10 @@ if enable_shopping_list:
             img_file = create_image()
             st.download_button(label="Download JPG", data=img_file, file_name="Shopping_List.jpg", mime="image/jpeg")
 
-    # Print Button (Opens a new window for printing)
-    st.markdown(
-        "<script>function printShoppingList() { window.print(); }</script><button onclick='printShoppingList()'>🖨️ Print Shopping List</button>",
-        unsafe_allow_html=True
-    )
 
 # Add Smart Recipe Scaling Section in Sidebar
 st.sidebar.subheader("🍽️ Smart Recipe Scaling")
-servings = st.sidebar.slider("Select Number of Servings:", min_value=1, max_value=100, value=4, step=1)
+servings = st.sidebar.slider("Slide to select number of Servings:", min_value=1, max_value=100, value=4, step=1)
 
 # Function to scale recipe ingredients based on servings
 def scale_recipe(recipe_text, servings):
