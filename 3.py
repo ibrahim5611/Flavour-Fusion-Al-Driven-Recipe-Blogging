@@ -66,7 +66,7 @@ if st.sidebar.button("🌐 Apply Language"):
     update_ui_language(selected_language)
 
 # User Input Section
-st.title(st.session_state.translated_ui.get("title", "Flavour Fusion: AI Recipe Generator"))
+st.title(st.session_state.get("title", "Flavour Fusion: AI Recipe Generator"))
 user_input = st.text_input("Recipe Name (e.g., 'Vegan Chocolate Cake'):", "")
 ingredients = st.text_area("Enter Ingredients (comma-separated):", "")
 word_count = st.number_input("Enter Word Count:", min_value=100, max_value=2000, step=100, value=500)

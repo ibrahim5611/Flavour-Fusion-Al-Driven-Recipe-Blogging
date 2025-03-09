@@ -22,6 +22,7 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
+
 # Apply custom CSS for better styling
 st.markdown("""
     <style>
@@ -54,10 +55,9 @@ flavor_profile = st.sidebar.selectbox("Flavor Profile:", ["None", "Spicy", "Swee
 # Main title
 st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>Flavour Fusion: AI Recipe Generator</h1>", unsafe_allow_html=True)
 
-# User Input Section
-st.subheader("🔍 Enter Your Recipe Preferences")
-user_input = st.text_input("Recipe Name (e.g., 'Vegan Chocolate Cake'):", "")
-ingredients = st.text_area("Enter Ingredients (comma-separated):", "")
+# User Input Section (Merged Recipe Name & Ingredients)
+st.subheader("🔍 Enter Recipe Details")
+recipe_details = st.text_area("Enter a recipe name, ingredients, or both:", "", height=100)
 word_count = st.number_input("Enter Word Count:", min_value=100, max_value=2000, step=100, value=500)
 
 # Function to generate a joke dynamically
@@ -86,10 +86,10 @@ if "recipe_text" not in st.session_state:
 if "food_pairings" not in st.session_state:
     st.session_state.food_pairings = ""
 
-# Function to generate the recipe and store it
+# Function to generate the recipe with merged input
 def generate_recipe():
-    if not user_input and not ingredients:
-        st.warning("⚠️ Please enter either a recipe topic or ingredients!")
+    if not recipe_details:
+        st.warning("⚠️ Please enter a recipe name or ingredients!")
         return
 
     st.write(f"### 🍳 Generating your {cuisine if cuisine != 'None' else ''} recipe in {language}...")
@@ -98,9 +98,7 @@ def generate_recipe():
     st.info(f"💡 Joke of the day: {joke}")
 
     # Construct prompt
-    prompt = f"Write a {word_count}-word recipe on {user_input} in {language}."
-    if ingredients:
-        prompt += f" Use only the following ingredients: {ingredients}."
+    prompt = f"Write a {word_count}-word recipe based on the following details: {recipe_details}. Generate the recipe in {language}."
     if dietary_preference:
         prompt += f" Ensure the recipe follows a {dietary_preference} diet."
     if cooking_time:
@@ -113,8 +111,8 @@ def generate_recipe():
 
     try:
         response = model.generate_content(prompt)
-        st.session_state.recipe_text = response.text.strip()  # Store in session state
-        st.session_state.food_pairings = get_food_pairing(user_input, cuisine)
+        st.session_state.recipe_text = response.text.strip()
+        st.session_state.food_pairings = get_food_pairing(recipe_details, cuisine)
 
     except Exception as e:
         st.error(f"Error generating recipe: {e}")
@@ -122,6 +120,7 @@ def generate_recipe():
 # Generate Button
 if st.button("Generate Recipe 🍽️"):
     generate_recipe()
+
 
 # Display stored recipe if available
 if st.session_state.recipe_text:
