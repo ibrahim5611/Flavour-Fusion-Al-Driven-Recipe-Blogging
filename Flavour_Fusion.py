@@ -74,7 +74,7 @@ def get_joke(language):
 # Function to generate food pairing suggestions
 def get_food_pairing(recipe_name, cuisine):
     try:
-        prompt = f"Suggest complementary dishes, drinks, and desserts for {recipe_name} that match {cuisine} cuisine."
+        prompt = f"Suggest complementary dishes, drinks, and desserts for {recipe_name} that match {cuisine} cuisine in {language}."
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception:
@@ -146,7 +146,7 @@ def ask_ai_chef(question, recipe_text):
         return "Please enter a question about the recipe."
     
     try:
-        prompt = f"The following is a recipe: {recipe_text}. The user has a question: {question}. Provide a helpful and concise answer."
+        prompt = f"The following is a recipe: {recipe_text}. The user has a question: {question}. Provide a helpful and concise answer in {language}."
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
