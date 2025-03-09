@@ -156,6 +156,7 @@ if st.button("Ask AI Chef 🤖"):
         answer = ask_ai_chef(question, st.session_state.recipe_text)  # Use stored recipe
         st.write("**👨‍🍳 AI Chef Says:**")
         st.info(answer)
+
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from PIL import Image, ImageDraw, ImageFont
