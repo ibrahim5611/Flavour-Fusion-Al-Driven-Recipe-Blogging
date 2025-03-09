@@ -74,7 +74,7 @@ word_count = st.number_input("Enter Word Count:", min_value=100, max_value=2000,
 # Function to generate a joke dynamically
 def get_joke():
     try:
-        prompt = "Tell me a unique and funny programming joke."
+        prompt = "Tell me a unique and funny programming joke ."
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception:
@@ -98,7 +98,7 @@ def generate_recipe():
     joke = get_joke()
     st.info(f"💡 Joke of the day: {joke}")
 
-    prompt = f"Write a {word_count}-word recipe on {user_input}."
+    prompt = f"Write a {word_count}-word recipe on {user_input} in {selected_language}."
     if ingredients:
         prompt += f" Use only these ingredients: {ingredients}."
     prompt += " Also, provide a nutritional breakdown."
@@ -127,7 +127,7 @@ question = st.text_input(st.session_state.translated_ui.get("ask_question", "Ask
 
 def ask_ai_chef(question):
     try:
-        prompt = f"The following is a recipe: {st.session_state.recipe_text}. The user asks: {question}. Provide a helpful answer."
+        prompt = f"The following is a recipe: {st.session_state.recipe_text}. The user asks: {question}. Provide a helpful answer in {selected_language}."
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception:
