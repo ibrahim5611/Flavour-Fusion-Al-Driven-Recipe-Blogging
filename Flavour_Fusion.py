@@ -4,6 +4,10 @@ import os
 import random
 import time
 from dotenv import load_dotenv
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from PIL import Image, ImageDraw, ImageFont
+import io
 
 # Load API key securely
 load_dotenv()
@@ -156,11 +160,6 @@ if st.button("Ask AI Chef 🤖"):
         answer = ask_ai_chef(question, st.session_state.recipe_text)  # Use stored recipe
         st.write("**👨‍🍳 AI Chef Says:**")
         st.info(answer)
-
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from PIL import Image, ImageDraw, ImageFont
-import io
 
 # Add Shopping List Section in Sidebar
 st.sidebar.subheader("🛒 Shopping List Generator")
