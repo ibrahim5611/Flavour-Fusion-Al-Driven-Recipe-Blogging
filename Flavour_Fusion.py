@@ -46,7 +46,7 @@ st.markdown("""
         }
         .stTextInput>div>div>input {
             border-radius: 8px;
-            padding: 10px;
+            padding: 20px;
             font-size: 16px;
         }
     </style>
@@ -118,7 +118,7 @@ def get_joke(selected_language):
     try:
         random_seed = random.randint(1, 10000)
         timestamp = int(time.time())
-        prompt = f"Tell me a unique and funny joke in {selected_language} and the joke should not be repeated every time you should tell new jokes. (Seed: {random_seed}, Time: {timestamp})"
+        prompt = f"Tell me a unique and funny joke in {selected_language} and the joke should be trending in social media. (Seed: {random_seed}, Time: {timestamp})"
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception:
