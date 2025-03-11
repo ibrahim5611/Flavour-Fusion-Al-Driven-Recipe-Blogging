@@ -55,7 +55,7 @@ st.markdown("""
 # Function to translate UI dynamically
 def translate_text(text, selected_language):
     try:
-        prompt = f"Translate the following text into {selected_language} in a single line or convert the word into {selected_language} spellings: {text}"
+        prompt = f"Translate the following text into {selected_language} in a single line or convert the spelling of the word written into {selected_language} : {text}"
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception:
@@ -65,24 +65,24 @@ def translate_text(text, selected_language):
 def update_ui_language(selected_language):
     ui_texts = {
         "title": "Flavour Fusion: AI-Driven Recipe Blogging",
-        "settings": "⚙️ Settings",
-        "enter_recipe_details": "🔍 Enter Recipe Details",
-        "select_language": "🌍 Select Language",
-        "apply_language": "🌐 Apply Language",
-        "generate_recipe": "Generate Recipe 🍽️",
-        "ai_generated_recipe": "📜 AI-Generated Recipe:",
-        "food_pairings": "🍷 Food Pairing Suggestions:",
-        "ai_chef_q&a": "🧑‍🍳 Live Q&A with AI Chef",
+        "settings": "Settings",
+        "enter_recipe_details": "Enter Recipe Details",
+        "select_language": "Select Language",
+        "apply_language": "Apply Language",
+        "generate_recipe": "Generate Recipe",
+        "ai_generated_recipe": "AI-Generated Recipe:",
+        "food_pairings": "Food Pairing Suggestions:",
+        "ai_chef_q&a": "Live Q&A with AI Chef",
         "ask_question": "Ask a question about the recipe:",
-        "ask_ai_chef": "Ask AI Chef 🤖",
+        "ask_ai_chef": "Ask AI Chef",
         "enable_shopping_list": "Enable Shopping List",
-        "smart_scaling": "🍽️ Smart Recipe Scaling",
-        "scale_recipe": "🔄 Scale Recipe",
-        "your_shopping_list": "🛒 Your Shopping List",
-        "export_pdf": "📄 Export as PDF",
-        "export_png": "🖼️ Export as PNG",
-        "export_jpg": "🖼️ Export as JPG",
-        "shopping_list": "🛒 Shopping List Generator",
+        "smart_scaling": "Smart Recipe Scaling",
+        "scale_recipe": "Scale Recipe",
+        "your_shopping_list": "Your Shopping List",
+        "export_pdf": "Export as PDF",
+        "export_png": "Export as PNG",
+        "export_jpg": "Export as JPG",
+        "shopping_list": "Shopping List Generator",
         "editable_shopping_list": "Editable Shopping List",
         "ask_a_question_about_the_recipe": "Ask a question about the recipe (e.g., 'What can I use instead of eggs?')",
         "select_cuisine": "Select Cuisine:",
@@ -96,9 +96,9 @@ def update_ui_language(selected_language):
 
 
 # Sidebar for settings
-st.sidebar.title(st.session_state.translated_ui.get("settings", "⚙️ Settings"))
-selected_language = st.sidebar.selectbox(st.session_state.translated_ui.get("select_language", "🌍 Select Language"), ["English", "Abkhazian", "Afrikaans", "Akan", "Albanian", "Algerian", "American", "Amharic", "Andorran", "Angolan", "Antiguan", "Arabic", "Argentinian", "Armenian", "Australian", "Austrian", "Avar", "Azerbaijani", "Bahamian", "Bahraini", "Bangladeshi", "Barbadian", "Bashkir", "Basque", "Belarusian", "Belgian", "Belizean", "Beninese", "Bengali", "Bhutanese", "Bisaya", "Bolivian", "Bosnian", "Botswanan", "Bulgarian", "Burmese", "Cambodian", "Cameroonian", "Cape Verdean", "Carolinian", "Central African", "Chamorro", "Chechen", "Chichewa", "Chinese", "Chukchi", "Chuukese", "Comoran", "Comorian", "Congolese", "Croatian", "Czech", "Danish", "Dargin", "Dane", "Dholuo", "Djiboutian", "Dominican", "Dutch", "East Timorese", "Ecuadorian", "Egyptian", "Emirati", "Enets", "Eritrean", "Equatorial Guinean", "Erzya", "Estonian", "Ethiopian", "Even", "Evenki", "Faroese", "Fijian", "Filipino", "Finnish", "French", "Futunan", "Georgian", "German", "Ghanaian", "Greek", "Greenlandic", "Gujarati", "Hausa", "Hebrew", "Hindi", "Hungarian", "Icelandic", "Igbo", "Indonesian", "Ingrian", "Ingush", "Ivorian", "Italian", "Itelmen", "Japanese", "Javanese", "Kabardian", "Kalenjin", "Kalmyk", "Kamba", "Kannada", "Karachay-Balkar", "Karelian", "Kazakh", "Khakas", "Khanty", "Khmer", "Kikongo", "Kikuyu", "Kinyarwanda", "Kiribati", "Kirundi", "Kisii", "Kiswahili", "Kituba", "Komi", "Korean", "Koryak", "Kosovar", "Kosraean", "Kumyk", "Kurdish", "Kyrgyz", "Lao", "Latvian", "Lesothoan", "Lezgian", "Liberian", "Lingala", "Lithuanian", "Luxembourgish", "Luganda", "Macedonian", "Madagascan", "Malagasy", "Malawian", "Malay", "Malayalam", "Malian", "Maltese", "Maithili", "Maldivian", "Maasai", "Marshallese", "Mauritanian", "Mauritian", "Mexican", "Moldovan", "Mongolian", "Montenegrin", "Mordvin", "Mozambican", "Nanai", "Namibian", "Nandi", "Nauruan", "Nepali", "Nenets", "Nganasan", "Nigerian", "Nigerien", "Norwegian", "Odia", "Oromo", "Ossetian", "Palauan", "Papua New Guinean", "Pashto", "Persian", "Polish", "Portuguese", "Punjabi", "Pohnpeian", "Romanian", "Russian", "Samoan", "São Toméan", "Serbian", "Seychellois", "Sierra Leonean", "Sindhi", "Sinhala", "Slovak", "Slovenian", "Solomon Islander", "Somali", "Spanish", "Sundanese", "Swahili", "Swazi", "Swedish", "Swiss", "Tagalog", "Tajik", "Tamil", "Tatar", "Telugu", "Thai", "Tibetan", "Tigrinya", "Togolese", "Tongan", "Turkish", "Turkmen", "Tuvaluan", "Tuvinian", "Udmurt", "Ukrainian", "Urdu", "Uzbek", "Vanuatuan", "Vietnamese", "Wallisian", "Welsh", "Xhosa", "Yapese", "Yoruba", "Zambian", "Zimbabwean", "Zulu"])
-if st.sidebar.button(st.session_state.translated_ui.get("apply_language", "🌐 Apply Language")):
+st.sidebar.title(st.session_state.translated_ui.get("settings", "Settings"))
+selected_language = st.sidebar.selectbox(st.session_state.translated_ui.get("select_language", "Select Language"), ["English", "Abkhazian", "Afrikaans", "Akan", "Albanian", "Algerian", "American", "Amharic", "Andorran", "Angolan", "Antiguan", "Arabic", "Argentinian", "Armenian", "Australian", "Austrian", "Avar", "Azerbaijani", "Bahamian", "Bahraini", "Bangladeshi", "Barbadian", "Bashkir", "Basque", "Belarusian", "Belgian", "Belizean", "Beninese", "Bengali", "Bhutanese", "Bisaya", "Bolivian", "Bosnian", "Botswanan", "Bulgarian", "Burmese", "Cambodian", "Cameroonian", "Cape Verdean", "Carolinian", "Central African", "Chamorro", "Chechen", "Chichewa", "Chinese", "Chukchi", "Chuukese", "Comoran", "Comorian", "Congolese", "Croatian", "Czech", "Danish", "Dargin", "Dane", "Dholuo", "Djiboutian", "Dominican", "Dutch", "East Timorese", "Ecuadorian", "Egyptian", "Emirati", "Enets", "Eritrean", "Equatorial Guinean", "Erzya", "Estonian", "Ethiopian", "Even", "Evenki", "Faroese", "Fijian", "Filipino", "Finnish", "French", "Futunan", "Georgian", "German", "Ghanaian", "Greek", "Greenlandic", "Gujarati", "Hausa", "Hebrew", "Hindi", "Hungarian", "Icelandic", "Igbo", "Indonesian", "Ingrian", "Ingush", "Ivorian", "Italian", "Itelmen", "Japanese", "Javanese", "Kabardian", "Kalenjin", "Kalmyk", "Kamba", "Kannada", "Karachay-Balkar", "Karelian", "Kazakh", "Khakas", "Khanty", "Khmer", "Kikongo", "Kikuyu", "Kinyarwanda", "Kiribati", "Kirundi", "Kisii", "Kiswahili", "Kituba", "Komi", "Korean", "Koryak", "Kosovar", "Kosraean", "Kumyk", "Kurdish", "Kyrgyz", "Lao", "Latvian", "Lesothoan", "Lezgian", "Liberian", "Lingala", "Lithuanian", "Luxembourgish", "Luganda", "Macedonian", "Madagascan", "Malagasy", "Malawian", "Malay", "Malayalam", "Malian", "Maltese", "Maithili", "Maldivian", "Maasai", "Marshallese", "Mauritanian", "Mauritian", "Mexican", "Moldovan", "Mongolian", "Montenegrin", "Mordvin", "Mozambican", "Nanai", "Namibian", "Nandi", "Nauruan", "Nepali", "Nenets", "Nganasan", "Nigerian", "Nigerien", "Norwegian", "Odia", "Oromo", "Ossetian", "Palauan", "Papua New Guinean", "Pashto", "Persian", "Polish", "Portuguese", "Punjabi", "Pohnpeian", "Romanian", "Russian", "Samoan", "São Toméan", "Serbian", "Seychellois", "Sierra Leonean", "Sindhi", "Sinhala", "Slovak", "Slovenian", "Solomon Islander", "Somali", "Spanish", "Sundanese", "Swahili", "Swazi", "Swedish", "Swiss", "Tagalog", "Tajik", "Tamil", "Tatar", "Telugu", "Thai", "Tibetan", "Tigrinya", "Togolese", "Tongan", "Turkish", "Turkmen", "Tuvaluan", "Tuvinian", "Udmurt", "Ukrainian", "Urdu", "Uzbek", "Vanuatuan", "Vietnamese", "Wallisian", "Welsh", "Xhosa", "Yapese", "Yoruba", "Zambian", "Zimbabwean", "Zulu"])
+if st.sidebar.button(st.session_state.translated_ui.get("apply_language", "Apply Language")):
     update_ui_language(selected_language)
 cuisine = st.sidebar.selectbox(st.session_state.translated_ui.get("select_cuisine","Select Cuisine:"), ["Okay with any cuisine", "Italian", "Indian", "Mexican", "Chinese", "Thai", "French", "Mediterranean", "Japanese", "Korean", "Greek", "Spanish", "Middle Eastern", "American", "British", "German", "Brazilian", "Russian", "African", "Caribbean", "Vietnamese", "Turkish", "Moroccan", "Peruvian", "Filipino", "Indonesian", "Malaysian", "Australian", "Canadian", "Scandinavian", "Polish", "Portuguese", "Irish", "Scottish", "Dutch", "Belgian", "Swiss", "Austrian", "Hungarian", "Czech", "Slovak", "Romanian", "Bulgarian", "Ukrainian", "Georgian", "Armenian", "Lebanese", "Israeli", "Iranian", "Iraqi", "Egyptian", "Tunisian", "Algerian", "Nigerian", "Ethiopian", "Kenyan", "South African", "Ghanaian", "Ivorian", "Senegalese", "Cameroonian", "Angolan", "Mozambican", "Argentinian", "Chilean", "Colombian", "Venezuelan", "Ecuadorian", "Bolivian", "Paraguayan", "Uruguayan", "Costa Rican", "Panamanian", "Cuban", "Puerto Rican", "Dominican", "Haitian", "Jamaican", "Bahamian", "Trinidadian", "Guyanese", "Surinamese", "Fijian", "Tongan", "Samoan", "Papua New Guinean", "Solomon Islander", "New Zealander", "Vanuatuan"])
 dietary_preference = st.sidebar.selectbox(st.session_state.translated_ui.get("dietary_preference","Dietary Preference:"), ["Okay with any dietary preference", "Vegan", "Vegetarian", "Non-Vegetarian", "Alcohol-Free","Gluten-Free", "Keto", "Paleo", "Halal", "Kosher", "Low-Carb", "Low-Fat", "Low-Sodium", "Nut-Free", "Sugar-Free", "Whole30", "Pescatarian", "Lactose-Free", "Dairy-Free", "Egg-Free", "Soy-Free", "Shellfish-Free","Peanut-Free", "Tree Nut-Free", "Wheat-Free", "Sesame-Free", "Mustard-Free", "Celery-Free", "Sulfite-Free", "Lupin-Free","Mollusk-Free"])
@@ -109,7 +109,7 @@ flavor_profile = st.sidebar.selectbox(st.session_state.translated_ui.get("flavor
 st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>Flavour Fusion: AI-Driven Recipe Blogging</h1>", unsafe_allow_html=True)
 
 # User Input Section (Merged Recipe Name & Ingredients)
-st.subheader(st.session_state.translated_ui.get("enter_recipe_details", "🔍 Enter Recipe Details"))
+st.subheader(st.session_state.translated_ui.get("enter_recipe_details", "Enter Recipe Details"))
 recipe_details = st.text_area("Enter a recipe name, ingredients, or both:", "", height=100)
 word_count = st.number_input("Enter Word Count:", min_value=100, max_value=3000, step=100, value=500)
 
@@ -139,10 +139,10 @@ def generate_recipe():
         st.warning("⚠️ Please enter a recipe name or ingredients!")
         return
 
-    st.write(f"### 🍳 Generating your {cuisine if cuisine != 'None' else ''} recipe in {selected_language}...")
+    st.write(f"### Generating your {cuisine if cuisine != 'Okay with any cuisine' else ''} recipe in {selected_language}...")
 
     joke = get_joke(selected_language)
-    st.info(f"💡 Joke of the day: {joke}")
+    st.info((st.session_state.translated_ui.get("joke_of_the_day","Joke of the day:")) + f"{joke}")
 
     # Construct prompt
     prompt = f"Write a {word_count}-word recipe based on the following details: {recipe_details}. Generate the recipe in {selected_language}."
@@ -154,7 +154,7 @@ def generate_recipe():
         prompt += f" Make the dish {flavor_profile} in taste."
     if cuisine != "None":
         prompt += f" Ensure the recipe follows {cuisine} cuisine traditions, including authentic ingredients and cooking methods."
-    prompt += " Also, provide a detailed nutritional breakdown in {selected_language}."
+    prompt += f" Also, provide a detailed nutritional breakdown in {selected_language}."
 
     try:
         response = model.generate_content(prompt)
@@ -165,7 +165,7 @@ def generate_recipe():
         st.error(f"Error generating recipe: {e}")
 
 # Generate Button
-if st.button(st.session_state.translated_ui.get("generate_recipe","Generate Recipe 🍽️")):
+if st.button(st.session_state.translated_ui.get("generate_recipe","Generate Recipe")):
     generate_recipe()
 
 
@@ -174,15 +174,15 @@ if st.session_state.recipe_text:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader(st.session_state.translated_ui.get("ai_generated_recipe", "📜 AI-Generated Recipe:"))
+        st.subheader(st.session_state.translated_ui.get("ai_generated_recipe", "AI-Generated Recipe:"))
         st.write(st.session_state.recipe_text)
 
     with col2:
-        st.subheader(st.session_state.translated_ui.get("food_pairings", "🍷 Food Pairing Suggestions:"))
+        st.subheader(st.session_state.translated_ui.get("food_pairings", "Food Pairing Suggestions:"))
         st.write(st.session_state.food_pairings)
 
-# 🧑‍🍳 Live Q&A Section
-st.subheader(st.session_state.translated_ui.get("ai_chef_q&a", "🧑‍🍳 Live Q&A with AI Chef"))
+# Live Q&A Section
+st.subheader(st.session_state.translated_ui.get("ai_chef_q&a", "Live Q&A with AI Chef"))
 question = st.text_input(st.session_state.translated_ui.get("ask_a_question_about_the_recipe", "Ask a question about the recipe (e.g., 'What can I use instead of eggs?'):"))
 
 # Function to answer cooking-related questions
@@ -199,7 +199,7 @@ def ask_ai_chef(question, recipe_text):
         return f"Error fetching answer: {e}"
 
 # Answer Button
-if st.button("Ask AI Chef 🤖"):
+if st.button("Ask AI Chef"):
     if not question:
         st.warning("⚠️ Please enter a question.")
     else:
@@ -208,7 +208,7 @@ if st.button("Ask AI Chef 🤖"):
         st.info(answer)
 
 # Add Shopping List Section in Sidebar
-st.sidebar.subheader(st.session_state.translated_ui.get("shopping_list", "🛒 Shopping List Generator"))
+st.sidebar.subheader(st.session_state.translated_ui.get("shopping_list", "Shopping List Generator"))
 enable_shopping_list = st.sidebar.checkbox(st.session_state.translated_ui.get("enable_shopping_list", "Enable Shopping List"))
 
 if enable_shopping_list:
@@ -236,7 +236,7 @@ def generate_shopping_list():
     if "shopping_list" not in st.session_state:
         st.session_state.shopping_list = ingredients_list
 
-    st.subheader(st.session_state.translated_ui.get("your_shopping_list", "🛒 Your Shopping List",))
+    st.subheader(st.session_state.translated_ui.get("your_shopping_list", "Your Shopping List",))
     st.text_area((st.session_state.translated_ui.get("editable_shopping_list", "Editable Shopping List")), value=st.session_state.shopping_list, height=200)
 
 # Function to create a PDF shopping list
@@ -245,7 +245,7 @@ def create_pdf():
     buffer = io.BytesIO()
     pdf = canvas.Canvas(buffer, pagesize=letter)
     pdf.setFont("Helvetica", 12)
-    pdf.drawString(100, 750, "🛒 Shopping List")
+    pdf.drawString(100, 750, "Shopping List")
     
     y_position = 730
     for line in st.session_state.shopping_list.split("\n"):
@@ -267,7 +267,7 @@ def create_image():
     except:
         font = ImageFont.load_default()
 
-    draw.text((50, 50), "🛒 Shopping List", fill="black", font=font)
+    draw.text((50, 50), "Shopping List", fill="black", font=font)
     
     y_position = 100
     for line in st.session_state.shopping_list.split("\n"):
@@ -286,23 +286,23 @@ if enable_shopping_list:
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button(st.session_state.translated_ui.get("export_pdf", "📄 Export as PDF")):
+        if st.button(st.session_state.translated_ui.get("export_pdf", "Export as PDF")):
             pdf_file = create_pdf()
             st.download_button(label="Download PDF", data=pdf_file, file_name="Shopping_List.pdf", mime="application/pdf")
 
     with col2:
-        if st.button(st.session_state.translated_ui.get("export_png", "🖼️ Export as PNG")):
+        if st.button(st.session_state.translated_ui.get("export_png", "Export as PNG")):
             img_file = create_image()
             st.download_button(label="Download PNG", data=img_file, file_name="Shopping_List.png", mime="image/png")
 
     with col3:
-        if st.button(st.session_state.translated_ui.get("export_jpg", "🖼️ Export as JPG")):
+        if st.button(st.session_state.translated_ui.get("export_jpg", "Export as JPG")):
             img_file = create_image()
             st.download_button(label="Download JPG", data=img_file, file_name="Shopping_List.jpg", mime="image/jpeg")
 
 
 # Add Smart Recipe Scaling Section in Sidebar
-st.sidebar.subheader(st.session_state.translated_ui.get("smart_scaling", "🍽️ Smart Recipe Scaling"))
+st.sidebar.subheader(st.session_state.translated_ui.get("smart_scaling", "Smart Recipe Scaling"))
 servings = st.sidebar.slider("Slide to select number of Servings:", min_value=1, max_value=100, value=4, step=1)
 
 # Function to scale recipe ingredients based on servings
@@ -316,10 +316,10 @@ def scale_recipe(recipe_text, servings):
         return "Unable to scale the recipe at the moment."
 
 # Button to scale recipe
-if st.sidebar.button("🔄 Scale Recipe"):
+if st.sidebar.button("Scale Recipe"):
     if not st.session_state.recipe_text:
-        st.sidebar.warning("⚠️ Generate a recipe first before scaling!")
+        st.sidebar.warning("Generate a recipe first before scaling!")
     else:
         scaled_recipe = scale_recipe(st.session_state.recipe_text, servings)
-        st.subheader(f"📏 Scaled Recipe for {servings} Servings:")
+        st.subheader(f"Scaled Recipe for {servings} Servings:")
         st.write(scaled_recipe)
