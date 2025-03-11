@@ -73,11 +73,8 @@ def translate_text(text, target_language):
 def update_ui_language(selected_language):
     ui_texts = {
         "title": "Flavour Fusion: AI-Driven Recipe Blogging",
-        "settings": "Settings",
         "enter_recipe_details": "Enter Recipe Details",
         "select_language": "Select Language",
-        "apply_language": "Apply Language",
-        "generate_recipe": "Generate Recipe",
         "ai_generated_recipe": "AI-Generated Recipe:",
         "food_pairings": "Food Pairing Suggestions:",
         "ai_chef_q&a": "Live Q&A with AI Chef",
@@ -90,9 +87,15 @@ def update_ui_language(selected_language):
         "export_pdf": "Export as PDF",
         "export_png": "Export as PNG",
         "export_jpg": "Export as JPG",
+        "joke_of_the_day": "Joke of the day: ",
         "shopping_list_generator": "Shopping List Generator",
         "editable_shopping_list": "Editable Shopping List",
-        "ask_a_question_about_the_recipe": "Ask a question about the recipe (e.g., 'What can I use instead of eggs?')",
+        "shopping_list": "Shopping List",
+        "generate_recipe": "Generate Recipe",
+        "dietary_preference": "Dietary Preference:",
+        "apply_language": "Apply Language",
+        "select_language": "Select Language",
+        "settings": "Settings",
         "select_cuisine": "Select Cuisine:",
         "dietary_preference": "Dietary Preference:",
         "cooking_time": "Max Cooking Time (minutes):",
@@ -104,9 +107,9 @@ def update_ui_language(selected_language):
 
 
 # Sidebar for settings
-st.sidebar.title("⚙️ Settings")
-selected_language = st.sidebar.text_input("🌍 Enter Language (e.g., Spanish, French, Hindi):", "English")
-if st.sidebar.button("🌐 Apply Language"):
+st.sidebar.title(st.session_state.translated_ui.get("settings","Settings"))
+selected_language = st.sidebar.text_input("Enter Language (e.g., Spanish, French, Hindi):", "English")
+if st.sidebar.button(st.session_state.translated_ui.get("apply_language","Apply Language")):
     update_ui_language(selected_language)
 
 cuisine = st.sidebar.selectbox(st.session_state.translated_ui.get("select_cuisine","Select Cuisine:"), ["Okay with any cuisine", "Italian", "Indian", "Mexican", "Chinese", "Thai", "French", "Mediterranean", "Japanese", "Korean", "Greek", "Spanish", "Middle Eastern", "American", "British", "German", "Brazilian", "Russian", "African", "Caribbean", "Vietnamese", "Turkish", "Moroccan", "Peruvian", "Filipino", "Indonesian", "Malaysian", "Australian", "Canadian", "Scandinavian", "Polish", "Portuguese", "Irish", "Scottish", "Dutch", "Belgian", "Swiss", "Austrian", "Hungarian", "Czech", "Slovak", "Romanian", "Bulgarian", "Ukrainian", "Georgian", "Armenian", "Lebanese", "Israeli", "Iranian", "Iraqi", "Egyptian", "Tunisian", "Algerian", "Nigerian", "Ethiopian", "Kenyan", "South African", "Ghanaian", "Ivorian", "Senegalese", "Cameroonian", "Angolan", "Mozambican", "Argentinian", "Chilean", "Colombian", "Venezuelan", "Ecuadorian", "Bolivian", "Paraguayan", "Uruguayan", "Costa Rican", "Panamanian", "Cuban", "Puerto Rican", "Dominican", "Haitian", "Jamaican", "Bahamian", "Trinidadian", "Guyanese", "Surinamese", "Fijian", "Tongan", "Samoan", "Papua New Guinean", "Solomon Islander", "New Zealander", "Vanuatuan"])
@@ -126,7 +129,7 @@ def get_joke(selected_language):
     try:
         random_seed = random.randint(1, 10000)
         timestamp = int(time.time())
-        prompt = f"Tell me a unique and funny joke in {selected_language} and the joke should be trending in social media. (Seed: {random_seed}, Time: {timestamp})"
+        prompt = f"Tell me a unique and funny joke in {selected_language}, you can say joke about any thing you want but it should have to be in {selected_language}. (Seed: {random_seed}, Time: {timestamp})"
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception:
@@ -331,3 +334,4 @@ if st.sidebar.button("Scale Recipe"):
         scaled_recipe = scale_recipe(st.session_state.recipe_text, servings)
         st.subheader(f"Scaled Recipe for {servings} Servings:")
         st.write(scaled_recipe)
+        st.sidebar.success("Recipe scaled successfully!")
