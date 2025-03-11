@@ -49,13 +49,21 @@ st.markdown("""
             padding: 20px;
             font-size: 16px;
         }
+        .stTitle {
+            color: #ff4b4b;
+            text-align: center;
+        }
+        .stSubheader {
+            color: #ff4b4b;
+            text-align: center;
+        }
     </style>
 """, unsafe_allow_html=True)
 
 # Function to translate UI dynamically
-def translate_text(text, selected_language):
+def translate_text(text, target_language):
     try:
-        prompt = f"Translate the following text into {selected_language} in a single line or convert the spelling of the word written into {selected_language} : {text}"
+        prompt = f"Translate the following text into {target_language} in a only in one line : {text}"
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception:
@@ -82,7 +90,7 @@ def update_ui_language(selected_language):
         "export_pdf": "Export as PDF",
         "export_png": "Export as PNG",
         "export_jpg": "Export as JPG",
-        "shopping_list": "Shopping List Generator",
+        "shopping_list_generator": "Shopping List Generator",
         "editable_shopping_list": "Editable Shopping List",
         "ask_a_question_about_the_recipe": "Ask a question about the recipe (e.g., 'What can I use instead of eggs?')",
         "select_cuisine": "Select Cuisine:",
@@ -96,19 +104,19 @@ def update_ui_language(selected_language):
 
 
 # Sidebar for settings
-st.sidebar.title(st.session_state.translated_ui.get("settings", "Settings"))
-selected_language = st.sidebar.selectbox(st.session_state.translated_ui.get("select_language", "Select Language"), ["English", "Abkhazian", "Afrikaans", "Akan", "Albanian", "Algerian", "American", "Amharic", "Andorran", "Angolan", "Antiguan", "Arabic", "Argentinian", "Armenian", "Australian", "Austrian", "Avar", "Azerbaijani", "Bahamian", "Bahraini", "Bangladeshi", "Barbadian", "Bashkir", "Basque", "Belarusian", "Belgian", "Belizean", "Beninese", "Bengali", "Bhutanese", "Bisaya", "Bolivian", "Bosnian", "Botswanan", "Bulgarian", "Burmese", "Cambodian", "Cameroonian", "Cape Verdean", "Carolinian", "Central African", "Chamorro", "Chechen", "Chichewa", "Chinese", "Chukchi", "Chuukese", "Comoran", "Comorian", "Congolese", "Croatian", "Czech", "Danish", "Dargin", "Dane", "Dholuo", "Djiboutian", "Dominican", "Dutch", "East Timorese", "Ecuadorian", "Egyptian", "Emirati", "Enets", "Eritrean", "Equatorial Guinean", "Erzya", "Estonian", "Ethiopian", "Even", "Evenki", "Faroese", "Fijian", "Filipino", "Finnish", "French", "Futunan", "Georgian", "German", "Ghanaian", "Greek", "Greenlandic", "Gujarati", "Hausa", "Hebrew", "Hindi", "Hungarian", "Icelandic", "Igbo", "Indonesian", "Ingrian", "Ingush", "Ivorian", "Italian", "Itelmen", "Japanese", "Javanese", "Kabardian", "Kalenjin", "Kalmyk", "Kamba", "Kannada", "Karachay-Balkar", "Karelian", "Kazakh", "Khakas", "Khanty", "Khmer", "Kikongo", "Kikuyu", "Kinyarwanda", "Kiribati", "Kirundi", "Kisii", "Kiswahili", "Kituba", "Komi", "Korean", "Koryak", "Kosovar", "Kosraean", "Kumyk", "Kurdish", "Kyrgyz", "Lao", "Latvian", "Lesothoan", "Lezgian", "Liberian", "Lingala", "Lithuanian", "Luxembourgish", "Luganda", "Macedonian", "Madagascan", "Malagasy", "Malawian", "Malay", "Malayalam", "Malian", "Maltese", "Maithili", "Maldivian", "Maasai", "Marshallese", "Mauritanian", "Mauritian", "Mexican", "Moldovan", "Mongolian", "Montenegrin", "Mordvin", "Mozambican", "Nanai", "Namibian", "Nandi", "Nauruan", "Nepali", "Nenets", "Nganasan", "Nigerian", "Nigerien", "Norwegian", "Odia", "Oromo", "Ossetian", "Palauan", "Papua New Guinean", "Pashto", "Persian", "Polish", "Portuguese", "Punjabi", "Pohnpeian", "Romanian", "Russian", "Samoan", "São Toméan", "Serbian", "Seychellois", "Sierra Leonean", "Sindhi", "Sinhala", "Slovak", "Slovenian", "Solomon Islander", "Somali", "Spanish", "Sundanese", "Swahili", "Swazi", "Swedish", "Swiss", "Tagalog", "Tajik", "Tamil", "Tatar", "Telugu", "Thai", "Tibetan", "Tigrinya", "Togolese", "Tongan", "Turkish", "Turkmen", "Tuvaluan", "Tuvinian", "Udmurt", "Ukrainian", "Urdu", "Uzbek", "Vanuatuan", "Vietnamese", "Wallisian", "Welsh", "Xhosa", "Yapese", "Yoruba", "Zambian", "Zimbabwean", "Zulu"])
-if st.sidebar.button(st.session_state.translated_ui.get("apply_language", "Apply Language")):
+st.sidebar.title("⚙️ Settings")
+selected_language = st.sidebar.text_input("🌍 Enter Language (e.g., Spanish, French, Hindi):", "English")
+if st.sidebar.button("🌐 Apply Language"):
     update_ui_language(selected_language)
+
 cuisine = st.sidebar.selectbox(st.session_state.translated_ui.get("select_cuisine","Select Cuisine:"), ["Okay with any cuisine", "Italian", "Indian", "Mexican", "Chinese", "Thai", "French", "Mediterranean", "Japanese", "Korean", "Greek", "Spanish", "Middle Eastern", "American", "British", "German", "Brazilian", "Russian", "African", "Caribbean", "Vietnamese", "Turkish", "Moroccan", "Peruvian", "Filipino", "Indonesian", "Malaysian", "Australian", "Canadian", "Scandinavian", "Polish", "Portuguese", "Irish", "Scottish", "Dutch", "Belgian", "Swiss", "Austrian", "Hungarian", "Czech", "Slovak", "Romanian", "Bulgarian", "Ukrainian", "Georgian", "Armenian", "Lebanese", "Israeli", "Iranian", "Iraqi", "Egyptian", "Tunisian", "Algerian", "Nigerian", "Ethiopian", "Kenyan", "South African", "Ghanaian", "Ivorian", "Senegalese", "Cameroonian", "Angolan", "Mozambican", "Argentinian", "Chilean", "Colombian", "Venezuelan", "Ecuadorian", "Bolivian", "Paraguayan", "Uruguayan", "Costa Rican", "Panamanian", "Cuban", "Puerto Rican", "Dominican", "Haitian", "Jamaican", "Bahamian", "Trinidadian", "Guyanese", "Surinamese", "Fijian", "Tongan", "Samoan", "Papua New Guinean", "Solomon Islander", "New Zealander", "Vanuatuan"])
 dietary_preference = st.sidebar.selectbox(st.session_state.translated_ui.get("dietary_preference","Dietary Preference:"), ["Okay with any dietary preference", "Vegan", "Vegetarian", "Non-Vegetarian", "Alcohol-Free","Gluten-Free", "Keto", "Paleo", "Halal", "Kosher", "Low-Carb", "Low-Fat", "Low-Sodium", "Nut-Free", "Sugar-Free", "Whole30", "Pescatarian", "Lactose-Free", "Dairy-Free", "Egg-Free", "Soy-Free", "Shellfish-Free","Peanut-Free", "Tree Nut-Free", "Wheat-Free", "Sesame-Free", "Mustard-Free", "Celery-Free", "Sulfite-Free", "Lupin-Free","Mollusk-Free"])
 cooking_time = st.sidebar.slider(st.session_state.translated_ui.get("cooking_time","Max Cooking Time (minutes):"), min_value=5, max_value=120, value=30, step=5)
 flavor_profile = st.sidebar.selectbox(st.session_state.translated_ui.get("flavor_profile","Flavor Profile:"), ["Not specified", "Spicy", "Sweet", "Savory", "Sour", "Umami", "Bitter", "Salty", "Mild", "Hot", "Cold", "Refreshing", "Rich", "Creamy", "Crunchy", "Soft", "Chewy", "Juicy", "Tangy", "Zesty", "Fruity", "Nutty", "Herbal", "Earthy", "Smoky", "Garlicky", "Citrusy", "Peppery"])
 
-# Main title
-st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>Flavour Fusion: AI-Driven Recipe Blogging</h1>", unsafe_allow_html=True)
 
 # User Input Section (Merged Recipe Name & Ingredients)
+st.title(st.session_state.translated_ui.get("title", "Flavour Fusion: AI Recipe Generator"))
 st.subheader(st.session_state.translated_ui.get("enter_recipe_details", "Enter Recipe Details"))
 recipe_details = st.text_area("Enter a recipe name, ingredients, or both:", "", height=100)
 word_count = st.number_input("Enter Word Count:", min_value=100, max_value=3000, step=100, value=500)
@@ -208,7 +216,7 @@ if st.button("Ask AI Chef"):
         st.info(answer)
 
 # Add Shopping List Section in Sidebar
-st.sidebar.subheader(st.session_state.translated_ui.get("shopping_list", "Shopping List Generator"))
+st.sidebar.subheader(st.session_state.translated_ui.get("shopping_list_generator", "Shopping List Generator"))
 enable_shopping_list = st.sidebar.checkbox(st.session_state.translated_ui.get("enable_shopping_list", "Enable Shopping List"))
 
 if enable_shopping_list:
