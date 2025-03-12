@@ -119,7 +119,7 @@ flavor_profile = st.sidebar.selectbox(st.session_state.translated_ui.get("flavor
 
 
 # User Input Section (Merged Recipe Name & Ingredients)
-st.title(st.session_state.translated_ui.get("title", "Flavour Fusion: AI Recipe Generator"))
+st.title(st.session_state.translated_ui.get("title", "Flavour Fusion: AI-Driven Recipe Blogging"))
 st.subheader(st.session_state.translated_ui.get("enter_recipe_details", "Enter Recipe Details"))
 recipe_details = st.text_area("Enter a recipe name, ingredients, or both:", "", height=100)
 word_count = st.number_input("Enter Word Count:", min_value=100, max_value=3000, step=100, value=500)
